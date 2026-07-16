@@ -1,0 +1,37 @@
+{
+  "skill_name": "incident-to-eval",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Yesterday our support agent told a customer they could get a refund under last quarter's policy. The policy changed three weeks ago. Make sure this never happens again.",
+      "expected_output": "The incident is reconstructed, classified as grounding / parametric-answer or stale-source-served with the reasoning shown, a JSON eval case is written with assertions from the closed set, the case is validated by running scripts/validate-eval.mjs, and the guard is set to run on every change.",
+      "assertions": [
+        "The failure is classified to one primary taxonomy mode with evidence",
+        "A complete JSON case file is produced",
+        "scripts/validate-eval.mjs is actually run and reported passing",
+        "Assertions use only types from the closed set",
+        "guard.runOn is set and justified"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Here is our postmortem: the billing agent called the charge API twice for the same invoice because the first call timed out and it retried without checking. Turn this into a regression test.",
+      "expected_output": "Classified as tool-use / swallowed-error (or duplicate-action if framed as coordination), with a case whose fixture makes the tool fail or time out and whose assertions check the agent surfaces the failure and does not double-charge.",
+      "assertions": [
+        "The classification is in the tool-use or coordination category with the mode named",
+        "The case fixture reproduces the timeout or failure condition",
+        "An assertion checks the charge is not issued twice or the failure is surfaced",
+        "The validator is run on the case"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our database fell over last night and the whole site was down for two hours. Can you write this up as an eval case?",
+      "expected_output": "The skill declines or redirects: there is no AI agent in this incident, so generic incident tooling applies, not this skill.",
+      "assertions": [
+        "No agent eval case is fabricated for a pure infrastructure outage",
+        "The response points out the skill covers AI agent incidents and suggests the right path"
+      ]
+    }
+  ]
+}
